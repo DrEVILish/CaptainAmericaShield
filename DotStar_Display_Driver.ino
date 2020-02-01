@@ -13,7 +13,7 @@
 #define CLOCKPIN 3 // DotStar ClockOutput Pin
 Adafruit_DotStar strip(NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_BRG); //change BRG to correct dotstar config
  
-const byte inputCapturePin = 10;  //  Hall effect sensor is connected to this pin
+#define ROTATEINPUT 10  //  Hall effect sensor is connected to this pin
 unsigned long povDisplayColumnWidthCount = 0;         // The arctime of a column 
 const unsigned int povDisplayColumnCount = 65;      // The number of columns in the display
 
@@ -30,24 +30,24 @@ unsigned long timeC;
 // initialised with static colours
 // 
 
-uint32_t red = 0xFF0000;
-uint32_t white = 0xFFFFFF;
-uint32_t blue = 0x0000FF;
+const uint32_t r = 0xFF0000;
+const uint32_t w = 0xFFFFFF;
+const uint32_t b = 0x0000FF;
 
 uint32_t povDisplayData[povDisplayColumnCount][NUMPIXELS] ={
-    {red,red,red,red,red,white,white,white,white,white,red,red,red,red,red , white,white,white,white,white,white,white,white,white , white,white,white,white,white,white},
-     {red,red,red,red,red,white,white,white,white,white,red,red,red,red,red , blue,white,white,white,white,white,white,white,white , white,white,white,white,white,white},
-      {red,red,red,red,red,white,white,white,white,white,red,red,red,red,red , blue,blue,white,white,white,white,white,white,white , white,white,white,white,white,white},
-       {red,red,red,red,red,white,white,white,white,white,red,red,red,red,red , blue,blue,blue,white,white,white,white,white,white , white,white,white,white,white,white},
-        {red,red,red,red,red,white,white,white,white,white,red,red,red,red,red , blue,blue,blue,blue,white,white,white,white,white , white,white,white,white,white,white},
-         {red,red,red,red,red,white,white,white,white,white,red,red,red,red,red , blue,blue,blue,blue,blue,blue,blue,blue,white , white,white,white,white,white,white},
-          {red,red,red,red,red,white,white,white,white,white,red,red,red,red,red , blue,blue,blue,blue,blue,blue,blue,blue,blue , white,white,white,white,white,white},
-          {red,red,red,red,red,white,white,white,white,white,red,red,red,red,red , blue,blue,blue,blue,blue,blue,blue,blue,blue , white,white,white,white,white,white},
-         {red,red,red,red,red,white,white,white,white,white,red,red,red,red,red , blue,blue,blue,blue,blue,blue,blue,blue,white , white,white,white,white,white,white},
-        {red,red,red,red,red,white,white,white,white,white,red,red,red,red,red , blue,blue,blue,blue,white,white,white,white,white , white,white,white,white,white,white},
-       {red,red,red,red,red,white,white,white,white,white,red,red,red,red,red , blue,blue,blue,white,white,white,white,white,white , white,white,white,white,white,white},
-      {red,red,red,red,red,white,white,white,white,white,red,red,red,red,red , blue,blue,white,white,white,white,white,white,white , white,white,white,white,white,white},
-     {red,red,red,red,red,white,white,white,white,white,red,red,red,red,red , blue,white,white,white,white,white,white,white,white , white,white,white,white,white,white}
+    {r,r,r,r,r,w,w,w,w,w,r,r,r,r,r , w,w,w,w,w,w,w,w,w , w,w,w,w,w,w},
+    {r,r,r,r,r,w,w,w,w,w,r,r,r,r,r , b,w,w,w,w,w,w,w,w , w,w,w,w,w,w},
+    {r,r,r,r,r,w,w,w,w,w,r,r,r,r,r , b,b,w,w,w,w,w,w,w , w,w,w,w,w,w},
+    {r,r,r,r,r,w,w,w,w,w,r,r,r,r,r , b,b,b,w,w,w,w,w,w , w,w,w,w,w,w},
+    {r,r,r,r,r,w,w,w,w,w,r,r,r,r,r , b,b,b,b,w,w,w,w,w , w,w,w,w,w,w},
+    {r,r,r,r,r,w,w,w,w,w,r,r,r,r,r , b,b,b,b,b,b,b,b,w , w,w,w,w,w,w},
+    {r,r,r,r,r,w,w,w,w,w,r,r,r,r,r , b,b,b,b,b,b,b,b,b , w,w,w,w,w,w},
+    {r,r,r,r,r,w,w,w,w,w,r,r,r,r,r , b,b,b,b,b,b,b,b,b , w,w,w,w,w,w},
+    {r,r,r,r,r,w,w,w,w,w,r,r,r,r,r , b,b,b,b,b,b,b,b,w , w,w,w,w,w,w},
+    {r,r,r,r,r,w,w,w,w,w,r,r,r,r,r , b,b,b,b,w,w,w,w,w , w,w,w,w,w,w},
+    {r,r,r,r,r,w,w,w,w,w,r,r,r,r,r , b,b,b,w,w,w,w,w,w , w,w,w,w,w,w},
+    {r,r,r,r,r,w,w,w,w,w,r,r,r,r,r , b,b,w,w,w,w,w,w,w , w,w,w,w,w,w},
+    {r,r,r,r,r,w,w,w,w,w,r,r,r,r,r , b,w,w,w,w,w,w,w,w , w,w,w,w,w,w}
 };
  
                                    
@@ -59,7 +59,7 @@ void setup()
   strip.show(); // Initialize all pixels to 'off'
 
  //  external configuration
-  attachInterrupt(digitalPinToInterrupt(inputCapturePin), revolutionDetected, RISING);    //   Hall effect sensor connected to this pin
+  attachInterrupt(digitalPinToInterrupt(ROTATEINPUT), revolutionDetected, RISING);    //   Hall effect sensor connected to this pin
 
   interrupts();       // enable interrupts
    
